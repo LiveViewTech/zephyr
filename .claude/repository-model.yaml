@@ -1,0 +1,550 @@
+version: 1
+facts:
+  languages:
+    - id: lang-c
+      value: C
+      evidence:
+        - kernel/init.c
+        - samples/hello_world/src/main.c
+        - include/zephyr/kernel.h
+    - id: lang-python
+      value: Python
+      evidence:
+        - scripts/twister
+        - doc/conf.py
+        - scripts/requirements-base.txt
+    - id: lang-cmake
+      value: CMake
+      evidence:
+        - CMakeLists.txt
+        - samples/hello_world/CMakeLists.txt
+        - cmake/modules/extensions.cmake
+    - id: lang-kconfig
+      value: Kconfig
+      evidence:
+        - Kconfig
+        - Kconfig.zephyr
+        - drivers/Kconfig
+    - id: lang-devicetree
+      value: DeviceTree
+      evidence:
+        - dts/Kconfig
+        - dts/binding-template.yaml
+    - id: lang-rst
+      value: reStructuredText
+      evidence:
+        - README.rst
+        - doc/index.rst
+        - CONTRIBUTING.rst
+    - id: lang-yaml
+      value: YAML
+      evidence:
+        - west.yml
+        - MAINTAINERS.yml
+        - tests/test_config.yaml
+    - id: lang-shell
+      value: Shell
+      evidence:
+        - zephyr-env.sh
+    - id: lang-assembly
+      value: Assembly
+      evidence:
+        - arch/arm/core/cortex_m/reset.S
+  frameworks:
+    - id: fw-west
+      value: west
+      evidence:
+        - west.yml
+        - scripts/west-commands.yml
+        - scripts/requirements-base.txt
+    - id: fw-cmake
+      value: CMake
+      evidence:
+        - CMakeLists.txt
+        - samples/hello_world/CMakeLists.txt
+    - id: fw-twister
+      value: twister
+      evidence:
+        - scripts/twister
+        - scripts/west-commands.yml
+        - .github/workflows/twister.yaml
+    - id: fw-ztest
+      value: ztest
+      evidence:
+        - subsys/testsuite/ztest
+        - tests/ztest
+    - id: fw-sphinx
+      value: Sphinx
+      evidence:
+        - doc/conf.py
+        - doc/Makefile
+        - doc/requirements.txt
+    - id: fw-pytest
+      value: pytest
+      evidence:
+        - scripts/requirements-build-test.txt
+        - .github/workflows/twister_tests.yml
+  commands:
+    - id: cmd-west-update
+      name: west-update
+      value: west update
+      evidence:
+        - doc/develop/getting_started/index.rst
+        - .github/workflows/compliance.yml
+    - id: cmd-west-packages
+      name: west-packages-pip
+      value: west packages pip --install
+      evidence:
+        - doc/develop/getting_started/index.rst
+    - id: cmd-west-export
+      name: west-zephyr-export
+      value: west zephyr-export
+      evidence:
+        - doc/develop/getting_started/index.rst
+        - scripts/west-commands.yml
+    - id: cmd-west-sdk
+      name: west-sdk-install
+      value: west sdk install
+      evidence:
+        - doc/develop/getting_started/index.rst
+    - id: cmd-west-build
+      name: west-build
+      value: west build -p always -b <your-board-name> samples/basic/blinky
+      evidence:
+        - doc/develop/getting_started/index.rst
+        - scripts/west-commands.yml
+    - id: cmd-west-flash
+      name: west-flash
+      value: west flash
+      evidence:
+        - doc/develop/getting_started/index.rst
+        - scripts/west-commands.yml
+    - id: cmd-west-twister
+      name: west-twister
+      value: west twister -T samples/hello_world
+      evidence:
+        - .github/workflows/hello_world_multiplatform.yaml
+        - scripts/west-commands.yml
+    - id: cmd-twister
+      name: twister
+      value: ./scripts/twister
+      evidence:
+        - scripts/twister
+        - .github/workflows/twister.yaml
+    - id: cmd-pytest-twister
+      name: pytest-twister
+      value: PYTHONPATH=./scripts/tests pytest ./scripts/tests/twister
+      evidence:
+        - .github/workflows/twister_tests.yml
+    - id: cmd-source-env
+      name: source-zephyr-env
+      value: source zephyr-env.sh
+      evidence:
+        - zephyr-env.sh
+  entry_points:
+    - id: entry-readme
+      value: README.rst
+      evidence:
+        - README.rst
+    - id: entry-west-manifest
+      value: west.yml
+      evidence:
+        - west.yml
+    - id: entry-cmake-root
+      value: CMakeLists.txt
+      evidence:
+        - CMakeLists.txt
+    - id: entry-zephyr-env
+      value: zephyr-env.sh
+      evidence:
+        - zephyr-env.sh
+    - id: entry-hello-world
+      value: samples/hello_world/src/main.c
+      evidence:
+        - samples/hello_world/src/main.c
+        - samples/hello_world/CMakeLists.txt
+    - id: entry-twister
+      value: scripts/twister
+      evidence:
+        - scripts/twister
+    - id: entry-kernel-init
+      value: kernel/init.c
+      evidence:
+        - kernel/init.c
+        - kernel/main_weak.c
+    - id: entry-kconfig
+      value: Kconfig
+      evidence:
+        - Kconfig
+        - Kconfig.zephyr
+    - id: entry-version
+      value: VERSION
+      evidence:
+        - VERSION
+    - id: entry-contributing
+      value: CONTRIBUTING.rst
+      evidence:
+        - CONTRIBUTING.rst
+        - .gitlint
+    - id: entry-maintainers
+      value: MAINTAINERS.yml
+      evidence:
+        - MAINTAINERS.yml
+        - scripts/get_maintainer.py
+  components:
+    - id: comp-kernel
+      name: kernel
+      path: kernel
+      evidence:
+        - kernel/CMakeLists.txt
+        - kernel/init.c
+        - kernel/Kconfig
+    - id: comp-drivers
+      name: drivers
+      path: drivers
+      evidence:
+        - drivers/CMakeLists.txt
+        - drivers/Kconfig
+    - id: comp-subsys
+      name: subsys
+      path: subsys
+      evidence:
+        - subsys/CMakeLists.txt
+        - subsys/Kconfig
+        - subsys/bluetooth/CMakeLists.txt
+        - subsys/net/ip/net_core.c
+    - id: comp-arch
+      name: arch
+      path: arch
+      evidence:
+        - arch/CMakeLists.txt
+        - arch/Kconfig
+        - arch/archs.yml
+    - id: comp-boards
+      name: boards
+      path: boards
+      evidence:
+        - boards/CMakeLists.txt
+        - boards/Kconfig
+    - id: comp-soc
+      name: soc
+      path: soc
+      evidence:
+        - soc/CMakeLists.txt
+        - soc/Kconfig
+    - id: comp-dts
+      name: dts
+      path: dts
+      evidence:
+        - dts/Kconfig
+        - dts/binding-template.yaml
+    - id: comp-include
+      name: include
+      path: include
+      evidence:
+        - include/zephyr/kernel.h
+    - id: comp-scripts
+      name: scripts
+      path: scripts
+      evidence:
+        - scripts/twister
+        - scripts/west-commands.yml
+        - scripts/requirements.txt
+    - id: comp-tests
+      name: tests
+      path: tests
+      evidence:
+        - tests/test_config.yaml
+        - tests/ztest
+        - tests/bsim
+    - id: comp-samples
+      name: samples
+      path: samples
+      evidence:
+        - samples/hello_world/src/main.c
+        - samples/hello_world/CMakeLists.txt
+        - samples/index.rst
+    - id: comp-doc
+      name: doc
+      path: doc
+      evidence:
+        - doc/conf.py
+        - doc/Makefile
+        - doc/requirements.txt
+    - id: comp-cmake
+      name: cmake
+      path: cmake
+      evidence:
+        - cmake/modules/extensions.cmake
+        - CMakeLists.txt
+    - id: comp-modules
+      name: modules
+      path: modules
+      evidence:
+        - modules/Kconfig
+        - west.yml
+    - id: comp-lib
+      name: lib
+      path: lib
+      evidence:
+        - lib/CMakeLists.txt
+        - lib/Kconfig
+  dependencies:
+    - id: dep-west
+      name: west
+      type: external
+      evidence:
+        - scripts/requirements-base.txt
+        - west.yml
+    - id: dep-mcuboot
+      name: mcuboot
+      type: external
+      evidence:
+        - west.yml
+    - id: dep-mbedtls
+      name: mbedtls
+      type: external
+      evidence:
+        - west.yml
+    - id: dep-littlefs
+      name: littlefs
+      type: external
+      evidence:
+        - west.yml
+    - id: dep-openthread
+      name: openthread
+      type: external
+      evidence:
+        - west.yml
+    - id: dep-tfm
+      name: trusted-firmware-m
+      type: external
+      evidence:
+        - west.yml
+    - id: dep-pyyaml
+      name: PyYAML
+      type: external
+      evidence:
+        - scripts/requirements-base.txt
+    - id: dep-pytest
+      name: pytest
+      type: external
+      evidence:
+        - scripts/requirements-build-test.txt
+    - id: dep-pyelftools
+      name: pyelftools
+      type: external
+      evidence:
+        - scripts/requirements-base.txt
+  external_services:
+    - id: svc-github-actions
+      value: GitHub Actions
+      evidence:
+        - .github/workflows/twister.yaml
+        - .github/workflows/compliance.yml
+        - .github/workflows/doc-build.yml
+    - id: svc-zephyr-docs
+      value: docs.zephyrproject.org
+      evidence:
+        - README.rst
+    - id: svc-discord
+      value: Discord (chat.zephyrproject.org)
+      evidence:
+        - README.rst
+    - id: svc-mailing-lists
+      value: lists.zephyrproject.org
+      evidence:
+        - README.rst
+        - CONTRIBUTING.rst
+  testing:
+    - id: test-ztest
+      framework: ztest
+      evidence:
+        - subsys/testsuite/ztest
+        - tests/ztest
+    - id: test-twister
+      framework: twister
+      evidence:
+        - scripts/twister
+        - .github/workflows/twister.yaml
+        - tests/test_config.yaml
+    - id: test-pytest
+      framework: pytest
+      evidence:
+        - .github/workflows/twister_tests.yml
+        - .github/workflows/pylib_tests.yml
+        - scripts/requirements-build-test.txt
+    - id: test-bsim
+      framework: BabbleSim
+      evidence:
+        - tests/bsim
+        - .github/workflows/bsim-tests.yaml
+        - west.yml
+analysis:
+  purpose:
+    value: "Scalable RTOS for resource-constrained devices across many architectures and boards, with security-minded kernel and a west-managed module ecosystem."
+    confidence: high
+    evidence_refs:
+      - entry-readme
+      - entry-west-manifest
+      - comp-kernel
+      - fw-west
+  architecture:
+    value: "Applications are out-of-tree or under samples/tests and invoke find_package(Zephyr); CMake pulls kernel, arch/soc/board, drivers, and selected subsys via Kconfig/devicetree. west.yml fetches external modules. Twister discovers tests.yaml suites and builds/runs them on boards or simulators."
+    confidence: high
+    evidence_refs:
+      - entry-cmake-root
+      - entry-hello-world
+      - entry-west-manifest
+      - fw-cmake
+      - fw-twister
+      - comp-kernel
+      - comp-drivers
+      - comp-subsys
+      - comp-boards
+      - comp-dts
+  patterns:
+    - id: pat-west-workspace
+      value: "Build and module fetch require a west workspace; root CMakeLists.txt is not an application entry and errors if invoked as the app source dir."
+      confidence: high
+      evidence_refs:
+        - entry-cmake-root
+        - entry-west-manifest
+        - cmd-west-update
+        - cmd-west-build
+    - id: pat-kconfig-dts
+      value: "Feature selection is Kconfig-driven; hardware description is DeviceTree under dts/ and boards/; drivers/subsys gated with add_subdirectory_ifdef(CONFIG_*)."
+      confidence: high
+      evidence_refs:
+        - entry-kconfig
+        - comp-dts
+        - comp-drivers
+        - comp-subsys
+    - id: pat-sample-as-app
+      value: "Canonical app shape is samples/*/CMakeLists.txt with find_package(Zephyr) and target_sources(app ...); hello_world is the smoke sample."
+      confidence: high
+      evidence_refs:
+        - entry-hello-world
+        - comp-samples
+        - cmd-west-build
+    - id: pat-twister-discovery
+      value: "Twister discovers test/sample scenarios via tests.yaml (and related metadata) and is the primary CI harness (west twister / scripts/twister)."
+      confidence: high
+      evidence_refs:
+        - entry-twister
+        - test-twister
+        - cmd-west-twister
+        - comp-tests
+    - id: pat-commit-subsystem-prefix
+      value: "Contributions expect DCO Signed-off-by; CI checks commit formatting; gitlint config enforces subsystem-prefixed titles."
+      confidence: high
+      evidence_refs:
+        - entry-contributing
+  component_notes:
+    - ref: comp-kernel
+      purpose: "Core RTOS services (threads, scheduling, sync, memory, init); provides weak main if the app omits one."
+      confidence: high
+    - ref: comp-drivers
+      purpose: "Device driver implementations selected by Kconfig; large vendor/peripheral surface."
+      confidence: high
+    - ref: comp-subsys
+      purpose: "Higher-level subsystems (Bluetooth, networking, FS, logging, PM, ztest harness, etc.) composed into images via Kconfig."
+      confidence: high
+    - ref: comp-arch
+      purpose: "Architecture ports (ARM, RISC-V, x86, Xtensa, ARC, ...) and arch-specific boot/exception code."
+      confidence: high
+    - ref: comp-boards
+      purpose: "Board definitions (devicetree, Kconfig, board.yml) consumed as west build -b targets."
+      confidence: high
+    - ref: comp-soc
+      purpose: "SoC-level support packages bridging arch and board hardware description."
+      confidence: high
+    - ref: comp-dts
+      purpose: "Shared DeviceTree includes and YAML bindings that generate device configuration at build time."
+      confidence: high
+    - ref: comp-include
+      purpose: "Public C API headers under include/zephyr/ (kernel, drivers, subsystems)."
+      confidence: high
+    - ref: comp-scripts
+      purpose: "West extensions, twister, Kconfig/DTS tooling, compliance helpers, and Python requirements."
+      confidence: high
+    - ref: comp-tests
+      purpose: "In-tree verification suites for twister/ztest/bsim across kernel, drivers, and subsystems."
+      confidence: high
+    - ref: comp-samples
+      purpose: "Example applications demonstrating APIs and serving as CI/build smoke targets."
+      confidence: high
+    - ref: comp-doc
+      purpose: "Sphinx documentation tree (getting started, APIs, contribute guides)."
+      confidence: high
+    - ref: comp-cmake
+      purpose: "CMake modules, toolchain, linker, and package helpers used by the Zephyr build system."
+      confidence: high
+    - ref: comp-modules
+      purpose: "Integration glue for west-fetched external modules (HALs, crypto, FS, TF-M, etc.)."
+      confidence: high
+    - ref: comp-lib
+      purpose: "Support libraries (libc helpers, OS utilities such as printk, heaps, SMF)."
+      confidence: high
+  service_notes:
+    - ref: svc-github-actions
+      purpose: "CI for twister, compliance, docs, bsim, and related checks on PRs and main."
+      integration: "Workflows under .github/workflows invoke west update, west twister, and pytest against scripts."
+      confidence: high
+    - ref: svc-zephyr-docs
+      purpose: "Published upstream documentation referenced by README and getting started."
+      integration: "Links from README.rst; local docs built from doc/ via Sphinx."
+      confidence: high
+    - ref: svc-discord
+      purpose: "Community realtime chat linked from README."
+      confidence: high
+    - ref: svc-mailing-lists
+      purpose: "users/devel mailing lists for community support and development discussion."
+      confidence: high
+  dangerous_areas:
+    - id: danger-cmake-as-app
+      value: "Invoking CMake with the Zephyr tree root as the application source directory"
+      reason: "CMakeLists.txt fatals unless ZEPHYR_BINARY_DIR is set from an application build; apps must live under samples/tests or out-of-tree with find_package(Zephyr)."
+      confidence: high
+      evidence_refs:
+        - entry-cmake-root
+        - entry-hello-world
+    - id: danger-west-modules
+      value: "Building without a completed west update / module checkout"
+      reason: "west.yml pulls large external trees (HALs, mcuboot, mbedtls, TF-M, bsim). Missing modules break boards/drivers that depend on them."
+      confidence: high
+      evidence_refs:
+        - entry-west-manifest
+        - dep-mcuboot
+        - dep-mbedtls
+        - cmd-west-update
+        - comp-modules
+    - id: danger-board-target-syntax
+      value: "Board target naming for multi-core / multi-SoC boards"
+      reason: "west build -b often needs SoC/CPU cluster qualifiers (e.g. nrf5340dk/nrf5340/cpuapp); wrong target yields wrong image or configure failure."
+      confidence: high
+      evidence_refs:
+        - cmd-west-build
+        - comp-boards
+    - id: danger-maintainers-surface
+      value: "Touching code without consulting MAINTAINERS.yml ownership"
+      reason: "Huge multi-maintainer tree; area-specific review expectations are encoded in MAINTAINERS.yml and get_maintainer.py."
+      confidence: high
+      evidence_refs:
+        - entry-maintainers
+        - comp-drivers
+        - comp-subsys
+  questions:
+    - id: q-lvt-fork-divergence
+      question: "This remote is LiveViewTech/zephyr while west.yml and docs describe upstream zephyrproject-rtos. What intentional fork divergences (if any) should agents treat as authoritative vs upstream?"
+      area: ownership
+      priority: high
+      evidence_refs:
+        - entry-west-manifest
+    - id: q-optional-modules-default
+      question: "Default west group-filter disables babblesim/optional/testing groups — when must contributors enable them for local work?"
+      area: build
+      priority: medium
+      evidence_refs:
+        - entry-west-manifest
+        - test-bsim
