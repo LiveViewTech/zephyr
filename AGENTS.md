@@ -8,7 +8,6 @@ Scalable RTOS for resource-constrained devices across many CPU architectures and
 - Version: `VERSION` (4.x development line)
 - Stack: C + CMake + Kconfig + DeviceTree; Python tooling (west, twister); Sphinx docs
 - Manifest: `west.yml` (upstream remotes under zephyrproject-rtos)
-- Area guides: see Directory Map below
 
 ## Commands
 
@@ -39,21 +38,21 @@ Smoke board targets used in CI include `native_sim`, `qemu_cortex_m0`, `qemu_ris
 
 ## Directory Map
 
-- `kernel/` → `kernel/AGENTS.md`
-- `drivers/` → `drivers/AGENTS.md`
-- `subsys/` → `subsys/AGENTS.md`
-- `arch/` → `arch/AGENTS.md`
-- `boards/` → `boards/AGENTS.md`
-- `soc/` → `soc/AGENTS.md`
-- `dts/` → `dts/AGENTS.md`
-- `include/` → `include/AGENTS.md`
-- `scripts/` → `scripts/AGENTS.md`
-- `tests/` → `tests/AGENTS.md`
-- `samples/` → `samples/AGENTS.md`
-- `doc/` → `doc/AGENTS.md`
-- `cmake/` → `cmake/AGENTS.md`
-- `modules/` → `modules/AGENTS.md`
-- `lib/` → `lib/AGENTS.md`
+- `kernel/` — threads, scheduling, sync, heaps; weak default `main` in `kernel/main_weak.c`
+- `drivers/` — Kconfig-gated drivers (`add_subdirectory_ifdef`); consume DT bindings under `dts/bindings/`
+- `subsys/` — higher-level stacks (Bluetooth, net, FS, logging, PM, shell, ztest harness)
+- `arch/` — per-CPU ports (reset/IRQ/context switch); SoC/board details stay in `soc/` / `boards/`
+- `boards/` — `west build -b` targets (`board.yml` + DT), organized by vendor
+- `soc/` — SoC bring-up/Kconfig bridging `arch/` and `boards/`
+- `dts/` — shared `.dtsi` and YAML bindings; follow `dts/binding-template.yaml`
+- `include/` — public APIs under `include/zephyr/` (implementations live elsewhere)
+- `scripts/` — twister, west extensions (`scripts/west-commands.yml`), requirements pins for CI
+- `tests/` — twister suites via per-dir `tests.yaml` (host twister logic tested under `scripts/tests/`)
+- `samples/` — example apps (`find_package(Zephyr)`); prefer `samples/hello_world` as the template
+- `doc/` — Sphinx docs (`doc/Makefile`, `doc/requirements.txt`); CI in `.github/workflows/doc-build.yml`
+- `cmake/` — toolchain/link/Kconfig helpers loaded by app `find_package(Zephyr)`
+- `modules/` — CMake/Kconfig glue for west-fetched externals (sources live at `west.yml` paths)
+- `lib/` — shared OS/libc/utility libraries compiled into the image via Kconfig
 
 ## Gotchas
 
